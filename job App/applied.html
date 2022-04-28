@@ -9,17 +9,33 @@
   </head>
 
   <body>
+   
     <div id="links">
       <div><a href="index.html">Home</a></div>
       <div><a href="applied.html">Applied Jobs</a></div>
       <div><a href="bookmark.html">Bookmarks</a></div>
     </div>
-    
-      <select id="sortNames" onchange="handleNameSort()">
+
+
+    <select id="sortNames" onchange="handleNameSort()">
       <option value=""> Sort by Name</option>
       <option value="asc">Ascending</option>
       <option value="dsc">Descending</option>
     </select>
+
+    <select id="sortSalary" onchange="handleSalarySort()">
+      <option value=""> Sort by Salary</option>
+      <option value="HTL">High to Low</option>
+      <option value="LTH">Low to High</option>
+    </select>
+
+    <select id="Filter" onchange="handleFilter()">
+      <option value="">Filter Category</option>
+      <option value="FSD">FSD</option>
+      <option value="Frontend">Frontend</option>
+      <option value="Backend">Backend</option>
+    </select>
+
 
     <main>
       <table>
@@ -43,8 +59,40 @@
     var jobArr= JSON.parse(localStorage.getItem("jobList"));
 
     displayData(jobArr)
-    
-     function handleNameSort(){
+
+    function handleFilter(){
+      var selected= document.getElementById("Filter").value;
+
+      var filterlist= jobArr.filter(function(elem){
+        return elem.personRole== selected;
+      })
+      displayData(filterlist)
+    }
+
+
+
+    function handleSalarySort(){
+      var selector= document.querySelector("#sortSalary").value
+
+      if(selector=="HTL"){
+        jobArr.sort(function(a,b){
+          return b.personSalary-a.personSalary;
+        });
+        displayData(jobArr)
+      }
+      if(selector=="LTH"){
+        jobArr.sort(function(a,b){
+          return a.personSalary-b.personSalary;
+        });
+        displayData(jobArr)
+      }
+    }
+
+
+
+
+
+    function handleNameSort(){
       var selected= document.querySelector("#sortNames").value;
 
 
@@ -60,7 +108,7 @@
           }
           return 0;
         });
-        console.log(jobArr)
+        
         displayData(jobArr);
       }
       if(selected=="dsc"){
@@ -75,7 +123,7 @@
           }
           return 0;
         })
-        console.log(jobArr)
+       
         displayData(jobArr);
       }
     }
@@ -84,6 +132,7 @@
     var bookMarkArr= JSON.parse(localStorage.getItem("bookMark")) || [];
 
     function displayData(data){
+      document.querySelector("tbody").innerHTML=""
      
       data.forEach(function(elem){
 
@@ -124,3 +173,4 @@
 
   </script>
 </html>
+
